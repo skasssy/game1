@@ -4252,4 +4252,10 @@
         oWjrMJWD53A7gyuqpX+cDHboz/R3W4d5u1VZlVXpmfwPldS3LXO38QkAAAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="timerPulse.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>112, 17</value>
+  </metadata>
+  <metadata name="timerCountdown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 17</value>
+  </metadata>
 </root>

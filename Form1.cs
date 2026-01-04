@@ -8,7 +8,9 @@ namespace game
     public partial class Form1 : Form
     {
         private Point pos;
-        private bool dragging, lose = false;
+        private Size startBtnSize;
+        private bool dragging, lose = false, pulse = true;
+        private int countdownValue = 3;
         private int countCoins = 0;
         private int lives = 3;
         private int level = 1;
@@ -16,6 +18,7 @@ namespace game
         private bool isInvulnerable = false;
         private int invulnerabilityTimer = 0;
         private Random rand = new Random();
+
 
         public Form1()
         {
@@ -37,6 +40,16 @@ namespace game
             // Инициализация жизней
             UpdateLivesDisplay();
         }
+
+        enum GameState
+        {
+            Menu,
+            Playing,
+            GameOver
+        }
+
+        GameState gameState = GameState.Menu;
+
 
         private void MouseClickDown(object sender, MouseEventArgs e)
         {
@@ -114,7 +127,7 @@ namespace game
             else
             {
                 isInvulnerable = true;
-                invulnerabilityTimer = 40;
+                invulnerabilityTimer = 100;
             }
         }
 
@@ -141,7 +154,7 @@ namespace game
 
         private void CheckLevelUp()
         {
-            int newLevel = 1 + (countCoins / 5); // Новый уровень каждые 5 монет
+            int newLevel = 1 + (countCoins / 3); // Новый уровень каждые 5 монет
 
             if (newLevel > level)
             {
@@ -164,7 +177,7 @@ namespace game
         {
             if (Controls.ContainsKey("labelLives"))
             {
-                labelLives.Text = "Жизни: " + new string('❤', lives);
+                labelLives.Text = "Жизни: " + new string('♥', lives);
                 labelLives.ForeColor = lives == 1 ? Color.Red :
                                       lives == 2 ? Color.Orange :
                                       Color.Green;
@@ -173,7 +186,7 @@ namespace game
 
         private void GameOver()
         {
-            timer.Enabled = false;
+            timer.Stop();
             labelLose.Visible = true;
             btnRestart.Visible = true;
             lose = true;
@@ -182,7 +195,7 @@ namespace game
         private void ResetGame()
         {
             // Остановка таймера
-            timer.Enabled = false;
+            timer.Stop();
 
             // Сброс переменных
             lose = false;
@@ -193,7 +206,7 @@ namespace game
             invulnerabilityTimer = 0;
 
             // Сброс скорости таймера
-            timer.Interval = 50;
+            timer.Interval = 15;
 
             // Сброс UI элементов
             labelLose.Visible = false;
@@ -233,7 +246,7 @@ namespace game
             ResetCoin();
 
             // Включение таймера
-            timer.Enabled = true;
+            timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -258,7 +271,7 @@ namespace game
             }
 
             int bgSpeed = 1 + level;  // Скорость фона
-            int enemySpeed = 3 + level * 2;  // Скорость врагов
+            int enemySpeed = 1 + level * 2;  // Скорость врагов
 
             // Движение фона5
             bg1.Top += bgSpeed;
@@ -341,7 +354,11 @@ namespace game
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            player.BackColor = Color.Transparent;
+            ShowMenu();
+            timer.Stop();
+            startBtnSize = btnStart.Size;
+            timerPulse.Start();
+
             if (Controls.ContainsKey("labelPause"))
             {
                 labelPause.Visible = false;
@@ -363,6 +380,82 @@ namespace game
         private void btnRestart_Click(object sender, EventArgs e)
         {
             ResetGame();
+        }
+
+        private void ShowMenu()
+        {
+            panelMenu.Visible = true;
+            panelMenu.BringToFront();
+            gameState = GameState.Menu;
+        }
+
+        private void StartGame()
+        {
+            panelMenu.Visible = false;
+            ResetGame();
+            timer.Start();
+            gameState = GameState.Playing;
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            panelMenu.Visible = false;
+            StartCountdown();
+        }
+
+        private void StartCountdown()
+        {
+            countdownValue = 3;
+            labelCountdown.Visible = true;
+            labelCountdown.Text = "3";
+            timerCountdown.Start();
+        }
+
+        private void timerPulse_Tick(object sender, EventArgs e)
+        {
+            int delta = pulse ? 1 : -1;
+
+            btnStart.Width += delta;
+            btnStart.Height += delta;
+            btnStart.Left -= delta / 2;
+            btnStart.Top -= delta / 2;
+
+            if (btnStart.Width > startBtnSize.Width + 5)
+                pulse = false;
+
+            if (btnStart.Width < startBtnSize.Width)
+                pulse = true;
+        }
+
+        private void timerCountdown_Tick(object sender, EventArgs e)
+        {
+            countdownValue--;
+
+            if (countdownValue > 0)
+            {
+                labelCountdown.Text = countdownValue.ToString();
+
+                if (countdownValue == 2) labelCountdown.ForeColor = Color.Yellow;
+                if (countdownValue == 1) labelCountdown.ForeColor = Color.Orange;
+            }
+            else if (countdownValue == 0)
+            {
+                labelCountdown.Text = "ВПЕРЁД!";
+                labelCountdown.ForeColor = Color.Lime;
+            }
+            else
+            {
+                // Конец отсчёта
+                timerCountdown.Stop();
+                labelCountdown.Visible = false;
+
+                StartGame();
+            }
         }
     }
 }

@@ -44,12 +44,20 @@
             coin = new PictureBox();
             labelLevel = new Label();
             labelHighScore = new Label();
+            panelMenu = new Panel();
+            btnExit = new Button();
+            btnStart = new Button();
+            labelTitle = new Label();
+            labelCountdown = new Label();
+            timerPulse = new System.Windows.Forms.Timer(components);
+            timerCountdown = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)bg1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bg2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)player).BeginInit();
             ((System.ComponentModel.ISupportInitialize)enemy1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)enemy2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)coin).BeginInit();
+            panelMenu.SuspendLayout();
             SuspendLayout();
             // 
             // bg1
@@ -82,7 +90,7 @@
             player.Image = (Image)resources.GetObject("player.Image");
             player.Location = new Point(296, 517);
             player.Name = "player";
-            player.Size = new Size(128, 128);
+            player.Size = new Size(100, 100);
             player.SizeMode = PictureBoxSizeMode.StretchImage;
             player.TabIndex = 2;
             player.TabStop = false;
@@ -93,7 +101,7 @@
             enemy1.Image = (Image)resources.GetObject("enemy1.Image");
             enemy1.Location = new Point(172, -130);
             enemy1.Name = "enemy1";
-            enemy1.Size = new Size(128, 128);
+            enemy1.Size = new Size(100, 100);
             enemy1.SizeMode = PictureBoxSizeMode.StretchImage;
             enemy1.TabIndex = 3;
             enemy1.TabStop = false;
@@ -104,7 +112,7 @@
             enemy2.Image = (Image)resources.GetObject("enemy2.Image");
             enemy2.Location = new Point(552, -400);
             enemy2.Name = "enemy2";
-            enemy2.Size = new Size(128, 128);
+            enemy2.Size = new Size(100, 100);
             enemy2.SizeMode = PictureBoxSizeMode.StretchImage;
             enemy2.TabIndex = 4;
             enemy2.TabStop = false;
@@ -204,23 +212,99 @@
             labelHighScore.TabIndex = 12;
             labelHighScore.Text = "Рекорд: 0";
             // 
+            // panelMenu
+            // 
+            panelMenu.BackColor = Color.FromArgb(180, 0, 0);
+            panelMenu.Controls.Add(btnExit);
+            panelMenu.Controls.Add(btnStart);
+            panelMenu.Controls.Add(labelTitle);
+            panelMenu.Dock = DockStyle.Fill;
+            panelMenu.Location = new Point(0, 0);
+            panelMenu.Name = "panelMenu";
+            panelMenu.Size = new Size(840, 650);
+            panelMenu.TabIndex = 13;
+            // 
+            // btnExit
+            // 
+            btnExit.BackColor = Color.Black;
+            btnExit.FlatStyle = FlatStyle.Flat;
+            btnExit.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnExit.ForeColor = Color.White;
+            btnExit.Location = new Point(683, 580);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(130, 49);
+            btnExit.TabIndex = 2;
+            btnExit.Text = "ВЫХОД";
+            btnExit.UseVisualStyleBackColor = false;
+            btnExit.Click += btnExit_Click;
+            // 
+            // btnStart
+            // 
+            btnStart.BackColor = Color.LimeGreen;
+            btnStart.FlatStyle = FlatStyle.Flat;
+            btnStart.Font = new Font("Segoe UI Semibold", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnStart.ForeColor = Color.White;
+            btnStart.Location = new Point(359, 338);
+            btnStart.Name = "btnStart";
+            btnStart.Size = new Size(130, 49);
+            btnStart.TabIndex = 1;
+            btnStart.Text = "СТАРТ";
+            btnStart.UseVisualStyleBackColor = false;
+            btnStart.Click += btnStart_Click;
+            // 
+            // labelTitle
+            // 
+            labelTitle.AutoSize = true;
+            labelTitle.Font = new Font("Segoe UI", 48F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            labelTitle.ForeColor = Color.White;
+            labelTitle.Location = new Point(165, 212);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(556, 106);
+            labelTitle.TabIndex = 0;
+            labelTitle.Text = "CAR DODGER";
+            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelCountdown
+            // 
+            labelCountdown.BackColor = Color.Transparent;
+            labelCountdown.Font = new Font("Segoe UI", 60F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            labelCountdown.ForeColor = Color.White;
+            labelCountdown.Location = new Point(420, 225);
+            labelCountdown.Name = "labelCountdown";
+            labelCountdown.Size = new Size(0, 133);
+            labelCountdown.TabIndex = 3;
+            labelCountdown.Text = "3";
+            labelCountdown.Visible = false;
+            // 
+            // timerPulse
+            // 
+            timerPulse.Interval = 40;
+            timerPulse.Tick += timerPulse_Tick;
+            // 
+            // timerCountdown
+            // 
+            timerCountdown.Interval = 1000;
+            timerCountdown.Tick += timerCountdown_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(840, 650);
+            Controls.Add(labelCountdown);
+            Controls.Add(panelMenu);
+            Controls.Add(player);
+            Controls.Add(btnRestart);
+            Controls.Add(labelLose);
             Controls.Add(labelHighScore);
             Controls.Add(labelLevel);
             Controls.Add(coin);
             Controls.Add(labelLives);
             Controls.Add(labelCoins);
             Controls.Add(labelPause);
-            Controls.Add(btnRestart);
-            Controls.Add(labelLose);
             Controls.Add(enemy2);
             Controls.Add(enemy1);
-            Controls.Add(player);
             Controls.Add(bg1);
             Controls.Add(bg2);
             FormBorderStyle = FormBorderStyle.None;
@@ -236,6 +320,8 @@
             ((System.ComponentModel.ISupportInitialize)enemy1).EndInit();
             ((System.ComponentModel.ISupportInitialize)enemy2).EndInit();
             ((System.ComponentModel.ISupportInitialize)coin).EndInit();
+            panelMenu.ResumeLayout(false);
+            panelMenu.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -256,5 +342,12 @@
         private PictureBox coin;
         private Label labelLevel;
         private Label labelHighScore;
+        private Panel panelMenu;
+        private Label labelTitle;
+        private Button btnStart;
+        private Button btnExit;
+        private System.Windows.Forms.Timer timerPulse;
+        private Label labelCountdown;
+        private System.Windows.Forms.Timer timerCountdown;
     }
 }
