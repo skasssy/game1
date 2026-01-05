@@ -59,5 +59,15 @@ namespace game.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _390745_PCFFI8_300_03 {
+            get {
+                object obj = ResourceManager.GetObject("390745-PCFFI8-300-03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

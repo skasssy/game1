@@ -395,11 +395,6 @@ namespace game
             StartCountdown();
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void btnStart_Click(object sender, EventArgs e)
         {
             panelMenu.Visible = false;
@@ -438,9 +433,6 @@ namespace game
             if (countdownValue > 0)
             {
                 labelCountdown.Text = countdownValue.ToString();
-
-                if (countdownValue == 2) labelCountdown.BackColor = Color.Yellow;
-                if (countdownValue == 1) labelCountdown.BackColor = Color.Lime;
             }
             else
             {
