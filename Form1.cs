@@ -194,8 +194,6 @@ namespace game
 
         private void ResetGame()
         {
-            // Остановка таймера
-            timer.Stop();
 
             // Сброс переменных
             lose = false;
@@ -244,9 +242,6 @@ namespace game
 
             // Сброс позиции монеты
             ResetCoin();
-
-            // Включение таймера
-            timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -320,6 +315,7 @@ namespace game
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             {
+                if (labelCountdown.Visible) return;
                 if (lose || !timer.Enabled) return;
 
                 int speed = 10;
@@ -380,6 +376,7 @@ namespace game
         private void btnRestart_Click(object sender, EventArgs e)
         {
             ResetGame();
+            StartCountdown();
         }
 
         private void ShowMenu()
@@ -393,8 +390,9 @@ namespace game
         {
             panelMenu.Visible = false;
             ResetGame();
-            timer.Start();
             gameState = GameState.Playing;
+
+            StartCountdown();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -411,8 +409,8 @@ namespace game
         private void StartCountdown()
         {
             countdownValue = 3;
+            labelCountdown.Text = countdownValue.ToString();
             labelCountdown.Visible = true;
-            labelCountdown.Text = "3";
             timerCountdown.Start();
         }
 
@@ -420,10 +418,10 @@ namespace game
         {
             int delta = pulse ? 1 : -1;
 
-            btnStart.Width += delta;
-            btnStart.Height += delta;
-            btnStart.Left -= delta / 2;
-            btnStart.Top -= delta / 2;
+            btnStart.Width += delta * 2;
+            btnStart.Height += delta * 2;
+            btnStart.Left -= delta;
+            btnStart.Top -= delta;
 
             if (btnStart.Width > startBtnSize.Width + 5)
                 pulse = false;
@@ -431,6 +429,7 @@ namespace game
             if (btnStart.Width < startBtnSize.Width)
                 pulse = true;
         }
+
 
         private void timerCountdown_Tick(object sender, EventArgs e)
         {
@@ -440,22 +439,23 @@ namespace game
             {
                 labelCountdown.Text = countdownValue.ToString();
 
-                if (countdownValue == 2) labelCountdown.ForeColor = Color.Yellow;
-                if (countdownValue == 1) labelCountdown.ForeColor = Color.Orange;
-            }
-            else if (countdownValue == 0)
-            {
-                labelCountdown.Text = "ВПЕРЁД!";
-                labelCountdown.ForeColor = Color.Lime;
+                if (countdownValue == 2) labelCountdown.BackColor = Color.Yellow;
+                if (countdownValue == 1) labelCountdown.BackColor = Color.Lime;
             }
             else
             {
                 // Конец отсчёта
                 timerCountdown.Stop();
+
                 labelCountdown.Visible = false;
 
-                StartGame();
+                timer.Start();
             }
+        }
+
+        private void panelMenu_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
