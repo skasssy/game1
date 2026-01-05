@@ -268,7 +268,7 @@ namespace game
             int bgSpeed = 1 + level;  // Скорость фона
             int enemySpeed = 1 + level * 2;  // Скорость врагов
 
-            // Движение фона5
+            // Движение фона
             bg1.Top += bgSpeed;
             bg2.Top += bgSpeed;
 
@@ -443,11 +443,6 @@ namespace game
 
                 timer.Start();
             }
-        }
-
-        private void panelMenu_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

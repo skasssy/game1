@@ -220,7 +220,6 @@
             panelMenu.Name = "panelMenu";
             panelMenu.Size = new Size(840, 650);
             panelMenu.TabIndex = 13;
-            panelMenu.Paint += panelMenu_Paint;
             // 
             // btnStart
             // 
@@ -268,9 +267,9 @@
             BackColor = Color.Gray;
             ClientSize = new Size(840, 650);
             Controls.Add(panelMenu);
+            Controls.Add(labelLose);
             Controls.Add(enemy1);
             Controls.Add(enemy2);
-            Controls.Add(labelLose);
             Controls.Add(btnRestart);
             Controls.Add(labelCountdown);
             Controls.Add(player);
