@@ -1,4 +1,6 @@
-﻿namespace game
+﻿using System.Windows.Forms;
+
+namespace game
 {
     partial class Form1
     {
@@ -46,9 +48,13 @@
             labelHighScore = new Label();
             panelMenu = new Panel();
             btnStart = new Button();
+            healthItem = new PictureBox();
+            boss = new PictureBox();
+            HPpanel = new Panel();
             labelCountdown = new Label();
             timerPulse = new System.Windows.Forms.Timer(components);
             timerCountdown = new System.Windows.Forms.Timer(components);
+            bossItem = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)bg1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bg2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)player).BeginInit();
@@ -56,6 +62,9 @@
             ((System.ComponentModel.ISupportInitialize)enemy2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)coin).BeginInit();
             panelMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)healthItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)boss).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)bossItem).BeginInit();
             SuspendLayout();
             // 
             // bg1
@@ -236,6 +245,39 @@
             btnStart.UseVisualStyleBackColor = false;
             btnStart.Click += btnStart_Click;
             // 
+            // healthItem
+            // 
+            healthItem.BackColor = Color.Gray;
+            healthItem.Image = (Image)resources.GetObject("healthItem.Image");
+            healthItem.Location = new Point(624, -1000);
+            healthItem.Name = "healthItem";
+            healthItem.Size = new Size(40, 40);
+            healthItem.SizeMode = PictureBoxSizeMode.StretchImage;
+            healthItem.TabIndex = 2;
+            healthItem.TabStop = false;
+            healthItem.Visible = false;
+            // 
+            // boss
+            // 
+            boss.BackColor = Color.Gray;
+            boss.Image = (Image)resources.GetObject("boss.Image");
+            boss.Location = new Point(340, -190);
+            boss.Name = "boss";
+            boss.Size = new Size(151, 190);
+            boss.SizeMode = PictureBoxSizeMode.StretchImage;
+            boss.TabIndex = 3;
+            boss.TabStop = false;
+            boss.Visible = false;
+            // 
+            // HPpanel
+            // 
+            HPpanel.BackColor = Color.Firebrick;
+            HPpanel.Location = new Point(268, 23);
+            HPpanel.Name = "HPpanel";
+            HPpanel.Size = new Size(300, 20);
+            HPpanel.TabIndex = 2;
+            HPpanel.Visible = false;
+            // 
             // labelCountdown
             // 
             labelCountdown.AutoSize = true;
@@ -260,6 +302,18 @@
             timerCountdown.Interval = 1000;
             timerCountdown.Tick += timerCountdown_Tick;
             // 
+            // bossItem
+            // 
+            bossItem.BackColor = Color.Gray;
+            bossItem.Image = (Image)resources.GetObject("bossItem.Image");
+            bossItem.Location = new Point(243, 442);
+            bossItem.Name = "bossItem";
+            bossItem.Size = new Size(50, 43);
+            bossItem.SizeMode = PictureBoxSizeMode.StretchImage;
+            bossItem.TabIndex = 14;
+            bossItem.TabStop = false;
+            bossItem.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -268,9 +322,13 @@
             ClientSize = new Size(840, 650);
             Controls.Add(panelMenu);
             Controls.Add(labelLose);
-            Controls.Add(enemy1);
-            Controls.Add(enemy2);
             Controls.Add(btnRestart);
+            Controls.Add(HPpanel);
+            Controls.Add(enemy2);
+            Controls.Add(enemy1);
+            Controls.Add(boss);
+            Controls.Add(healthItem);
+            Controls.Add(bossItem);
             Controls.Add(labelCountdown);
             Controls.Add(player);
             Controls.Add(labelHighScore);
@@ -295,6 +353,9 @@
             ((System.ComponentModel.ISupportInitialize)enemy2).EndInit();
             ((System.ComponentModel.ISupportInitialize)coin).EndInit();
             panelMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)healthItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)boss).EndInit();
+            ((System.ComponentModel.ISupportInitialize)bossItem).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -320,5 +381,9 @@
         private System.Windows.Forms.Timer timerPulse;
         private Label labelCountdown;
         private System.Windows.Forms.Timer timerCountdown;
+        private Panel HPpanel;
+        private PictureBox boss;
+        private PictureBox bossItem;
+        private PictureBox healthItem;
     }
 }
