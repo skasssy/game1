@@ -48,7 +48,7 @@ namespace game
             labelHighScore = new Label();
             panelMenu = new Panel();
             btnStart = new Button();
-            healthItem = new PictureBox();
+            health = new PictureBox();
             boss = new PictureBox();
             HPpanel = new Panel();
             labelCountdown = new Label();
@@ -62,7 +62,7 @@ namespace game
             ((System.ComponentModel.ISupportInitialize)enemy2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)coin).BeginInit();
             panelMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)healthItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)health).BeginInit();
             ((System.ComponentModel.ISupportInitialize)boss).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bossItem).BeginInit();
             SuspendLayout();
@@ -106,7 +106,7 @@ namespace game
             // 
             enemy1.BackColor = Color.Gray;
             enemy1.Image = (Image)resources.GetObject("enemy1.Image");
-            enemy1.Location = new Point(171, -129);
+            enemy1.Location = new Point(185, -129);
             enemy1.Name = "enemy1";
             enemy1.Size = new Size(86, 128);
             enemy1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -117,7 +117,7 @@ namespace game
             // 
             enemy2.BackColor = Color.Gray;
             enemy2.Image = (Image)resources.GetObject("enemy2.Image");
-            enemy2.Location = new Point(552, -400);
+            enemy2.Location = new Point(570, -400);
             enemy2.Name = "enemy2";
             enemy2.Size = new Size(86, 128);
             enemy2.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -245,17 +245,17 @@ namespace game
             btnStart.UseVisualStyleBackColor = false;
             btnStart.Click += btnStart_Click;
             // 
-            // healthItem
+            // health
             // 
-            healthItem.BackColor = Color.Gray;
-            healthItem.Image = (Image)resources.GetObject("healthItem.Image");
-            healthItem.Location = new Point(624, -1000);
-            healthItem.Name = "healthItem";
-            healthItem.Size = new Size(40, 40);
-            healthItem.SizeMode = PictureBoxSizeMode.StretchImage;
-            healthItem.TabIndex = 2;
-            healthItem.TabStop = false;
-            healthItem.Visible = false;
+            health.BackColor = Color.Gray;
+            health.Image = (Image)resources.GetObject("health.Image");
+            health.Location = new Point(624, -1000);
+            health.Name = "health";
+            health.Size = new Size(32, 32);
+            health.SizeMode = PictureBoxSizeMode.StretchImage;
+            health.TabIndex = 2;
+            health.TabStop = false;
+            health.Visible = false;
             // 
             // boss
             // 
@@ -327,7 +327,7 @@ namespace game
             Controls.Add(enemy2);
             Controls.Add(enemy1);
             Controls.Add(boss);
-            Controls.Add(healthItem);
+            Controls.Add(health);
             Controls.Add(bossItem);
             Controls.Add(labelCountdown);
             Controls.Add(player);
@@ -353,7 +353,7 @@ namespace game
             ((System.ComponentModel.ISupportInitialize)enemy2).EndInit();
             ((System.ComponentModel.ISupportInitialize)coin).EndInit();
             panelMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)healthItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)health).EndInit();
             ((System.ComponentModel.ISupportInitialize)boss).EndInit();
             ((System.ComponentModel.ISupportInitialize)bossItem).EndInit();
             ResumeLayout(false);
@@ -384,6 +384,6 @@ namespace game
         private Panel HPpanel;
         private PictureBox boss;
         private PictureBox bossItem;
-        private PictureBox healthItem;
+        private PictureBox health;
     }
 }
