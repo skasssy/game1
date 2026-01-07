@@ -18,6 +18,9 @@ namespace game
         private bool isInvulnerable = false;
         private int invulnerabilityTimer = 0;
         private Random rand = new Random();
+        private readonly int[] spawnPointsX = { 220, 340, 470, 600 };
+        private readonly int[] leftSpawnPoints = { 190, 320 };
+        private readonly int[] rightSpawnPoints = { 440, 570 };
         private int bossHP = 100;
         private int bossMaxHP = 100;
         private bool bossIntro = false;
@@ -29,13 +32,16 @@ namespace game
         private int bossChargeCooldown = 0;
         private int bossSpeed = 4;
         private Point bossStartPos;
+        private Point originalFormPos;
         private int itemSpeed = 8;
         private int itemDropTimer = 0;
         private bool canSpawnItem = true;
-        private int bossLevel = 2;
+        private int bossLevel = 5;
         private int bossHitTimer = 0;
         private bool bossHitAnim = false;
         private int bossHitOffsetX = 0;
+        private bool bossDeathAnim = false;
+        private int bossDeathTimer = 0;
 
         public Form1()
         {
@@ -116,11 +122,6 @@ namespace game
             }
         }
 
-        private int RandomSpawn(int minLeft, int maxLeft)
-        {
-            return rand.Next(minLeft, maxLeft);
-        }
-
         private bool OutOfScreen(Control obj)
         {
             return obj.Top >= 650;
@@ -132,25 +133,41 @@ namespace game
                 obj.Top += speed;
         }
 
+        private int GetLeftLaneSpawn()
+        {
+            return leftSpawnPoints[rand.Next(leftSpawnPoints.Length)];
+        }
+
+        private int GetRightLaneSpawn()
+        {
+            return rightSpawnPoints[rand.Next(rightSpawnPoints.Length)];
+        }
+
+        private int GetRandomSpawnPoint()
+        {
+            return spawnPointsX[rand.Next(spawnPointsX.Length)];
+        }
+
         private void ResetCoin()
         {
-            coin.Left = RandomSpawn(150, 560);
+            coin.Left = GetRandomSpawnPoint();
             coin.Top = -50;
             coin.Visible = true;
         }
 
-        private void ResetEnemy(PictureBox enemy, int minLeft, int maxLeft)
+        private void ResetEnemy(PictureBox enemy, bool isLeftEnemy)
         {
-            enemy.Left = RandomSpawn(minLeft, maxLeft);
+            enemy.Left = isLeftEnemy ? GetLeftLaneSpawn() : GetRightLaneSpawn();
             enemy.Top = -rand.Next(100, 400);
         }
+
 
         private void ResetHealth()
         {
             if (health.Visible || lives >= 3)
                 return;
 
-            health.Left = RandomSpawn(150, 560);
+            health.Left = GetRandomSpawnPoint();
             health.Top = -1000;
             health.Visible = true;
         }
@@ -324,6 +341,34 @@ namespace game
             // Если игра на паузе или проиграна - выходим
             if (!timer.Enabled || lose) return;
 
+            // Анимация смерти босса
+            if (bossDeathAnim)
+            {
+                bossDeathTimer--;
+
+                // дрожание босса
+                boss.Left = bossStartPos.X + rand.Next(-10, 11);
+                boss.Top += rand.Next(-5, 6);
+
+                // мигание
+                boss.Visible = bossDeathTimer % 4 != 0;
+
+                if (bossDeathTimer <= 0)
+                {
+                    bossDeathAnim = false;
+                    boss.Visible = false;
+
+                    timer.Stop();
+
+                    labelLose.Text = "ВЫ ПОБЕДИЛИ!";
+                    labelLose.BackColor = Color.Green;
+                    labelLose.Visible = true;
+                    btnRestart.Visible = true;
+                }
+
+                return;
+            }
+
             // Обновляем таймер неуязвимости
             if (isInvulnerable)
             {
@@ -360,8 +405,8 @@ namespace game
             // Восстановление объектов за пределами экрана
             if (!bossIntro && !bossFight)
             {
-                if (OutOfScreen(enemy1)) ResetEnemy(enemy1, 150, 300);
-                if (OutOfScreen(enemy2)) ResetEnemy(enemy2, 300, 560);
+                if (OutOfScreen(enemy1)) ResetEnemy(enemy1, true);
+                if (OutOfScreen(enemy2)) ResetEnemy(enemy2, false);
 
                 if (!coin.Visible || OutOfScreen(coin))
                     ResetCoin();
@@ -559,6 +604,7 @@ namespace game
                 if (bossHP <= 0)
                     KillBoss();
             }
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -734,13 +780,9 @@ namespace game
             HPpanel.Visible = false;
             bossItem.Visible = false;
 
-            timer.Stop();
-
-            labelLose.Text = "ВЫ ПОБЕДИЛИ!";
-            labelLose.BackColor = Color.Green;
-            labelLose.Visible = true;
-
-            btnRestart.Visible = true;
+            bossDeathAnim = true;
+            bossDeathTimer = 60;
+            boss.BackColor = Color.OrangeRed;
         }
 
         private void DropBossItem()
@@ -748,7 +790,7 @@ namespace game
 
             bossItem.Left = boss.Left + boss.Width / 2 - bossItem.Width / 2;
             bossItem.Top = boss.Top + boss.Height;
-            bossItem.Visible = true; 
+            bossItem.Visible = true;
 
             itemCollected = false;
             itemReturning = false;
