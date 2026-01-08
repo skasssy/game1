@@ -8,45 +8,53 @@ namespace game
     public partial class Form1 : Form
     {
         private Point pos;
-        private Size startBtnSize;
-        private bool dragging, lose = false, pulse = true;
+        private bool dragging;
+
+        private bool lose = false, pulse = true;
         private int countdownValue = 3;
+
         private int countCoins = 0;
         private int lives = 3;
         private int level = 1;
         private int highScore = 0;
-        private bool isInvulnerable = false;
+
         private int invulnerabilityTimer = 0;
+        private bool isInvulnerable = false;
+
         private Random rand = new Random();
         private readonly int[] spawnPointsX = { 220, 340, 470, 600 };
         private readonly int[] leftSpawnPoints = { 190, 320 };
         private readonly int[] rightSpawnPoints = { 440, 570 };
+
         private int bossHP = 100;
         private int bossMaxHP = 100;
+        private int bossLevel = 5;
+        private int bossSpeed = 4;
+        private int bossChargeCooldown = 0;
         private bool bossIntro = false;
         private bool bossFight = false;
         private bool bossActive = false;
-        private bool bossCharging = false;
-        private bool itemCollected = false;
-        private bool itemReturning = false;
-        private int bossChargeCooldown = 0;
-        private int bossSpeed = 4;
         private Point bossStartPos;
-        private Point originalFormPos;
+
         private int itemSpeed = 8;
         private int itemDropTimer = 0;
-        private bool canSpawnItem = true;
-        private int bossLevel = 5;
+        private bool itemCollected = false;
+        private bool itemReturning = false;
+
         private int bossHitTimer = 0;
-        private bool bossHitAnim = false;
         private int bossHitOffsetX = 0;
-        private bool bossDeathAnim = false;
+        private bool bossHitAnim = false;
+
         private int bossDeathTimer = 0;
+        private bool bossDeathAnim = false;
+
+        private Size startBtnSize;
 
         public Form1()
         {
             InitializeComponent();
 
+            // Перетаскивание окна
             bg1.MouseDown += MouseClickDown;
             bg1.MouseUp += MouseClickUp;
             bg1.MouseMove += MouseClickMove;
@@ -83,7 +91,6 @@ namespace game
 
         GameState gameState = GameState.Menu;
 
-
         private void MouseClickDown(object sender, MouseEventArgs e)
         {
             dragging = true;
@@ -108,11 +115,12 @@ namespace game
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
-                this.Close();
+                this.Close(); // Закрытие окна по клавише esc
             else if (e.KeyChar == 'p' || e.KeyChar == 'P')
-                TogglePause();  // Пауза по клавише P
+                TogglePause(); // Пауза по клавише P
         }
 
+        // Включение и выключение паузы
         private void TogglePause()
         {
             timer.Enabled = !timer.Enabled;
@@ -122,17 +130,20 @@ namespace game
             }
         }
 
+        // Проверка на выход из окна объектами
         private bool OutOfScreen(Control obj)
         {
             return obj.Top >= 650;
         }
 
+        // Движение объектов на экране
         private void MoveObj(Control obj, int speed)
         {
             if (obj.Visible)
                 obj.Top += speed;
         }
 
+        // Рандомное появление объектов по оси X
         private int GetLeftLaneSpawn()
         {
             return leftSpawnPoints[rand.Next(leftSpawnPoints.Length)];
@@ -148,6 +159,7 @@ namespace game
             return spawnPointsX[rand.Next(spawnPointsX.Length)];
         }
 
+        // Сброс объектов
         private void ResetCoin()
         {
             coin.Left = GetRandomSpawnPoint();
@@ -172,9 +184,9 @@ namespace game
             health.Visible = true;
         }
 
+        // Проверка на столкновение с врагами
         private void CheckCollisions()
         {
-            // Проверяем столкновение с врагами
             if ((player.Bounds.IntersectsWith(enemy1.Bounds) ||
                  player.Bounds.IntersectsWith(enemy2.Bounds)) && !isInvulnerable)
             {
@@ -197,11 +209,13 @@ namespace game
             }
             else
             {
+                // Включение неуязвимости игрока
                 isInvulnerable = true;
                 invulnerabilityTimer = 100;
             }
         }
 
+        // Сбор монет
         private void CollectCoin()
         {
             countCoins++;
@@ -223,9 +237,10 @@ namespace game
             coin.Visible = false;
         }
 
+        // Переход на новый уровень или на уровень с боссом
         private void CheckLevelUp()
         {
-            int newLevel = 1 + (countCoins / 3); // Новый уровень каждые 5 монет
+            int newLevel = 1 + (countCoins / 3); // Новый уровень каждые 3 монеты
 
             if (newLevel > level)
             {
@@ -249,6 +264,7 @@ namespace game
             }
         }
 
+        // Обновление количества жизней
         private void UpdateLivesDisplay()
         {
             if (Controls.ContainsKey("labelLives"))
@@ -260,6 +276,7 @@ namespace game
             }
         }
 
+        // Проигрыш
         private void GameOver()
         {
             timer.Stop();
@@ -272,6 +289,7 @@ namespace game
             lose = true;
         }
 
+        // Перезапуск
         private void ResetGame()
         {
 
@@ -341,16 +359,247 @@ namespace game
             // Если игра на паузе или проиграна - выходим
             if (!timer.Enabled || lose) return;
 
+            int bgSpeed = 1 + level;  // Скорость фона
+            int enemySpeed = 1 + level * 2;  // Скорость врагов
+
+            // Движение фона
+            MoveObj(bg1, bgSpeed);
+            MoveObj(bg2, bgSpeed);
+
+            if (OutOfScreen(bg1))
+            {
+                bg1.Top = 0;
+                bg2.Top = -650;
+            }
+
+            // Движение врагов
+            MoveObj(enemy1, enemySpeed);
+            MoveObj(enemy2, enemySpeed);
+
+            // Восстановление объектов за пределами экрана
+            if (!bossIntro && !bossFight)
+            {
+                if (OutOfScreen(enemy1)) ResetEnemy(enemy1, true);
+                if (OutOfScreen(enemy2)) ResetEnemy(enemy2, false);
+
+                if (!coin.Visible || OutOfScreen(coin))
+                    ResetCoin();
+
+                if (!health.Visible && lives < 3)
+                    ResetHealth();
+            }
+
+            // Проверка столкновений с врагами
+            CheckCollisions();
+
+
+            // Проверка сбора монеты
+            if (coin.Visible)
+            {
+                MoveObj(coin, bgSpeed);
+
+                // подбор
+                if (!bossIntro && !bossFight &&
+                player.Bounds.IntersectsWith(coin.Bounds))
+                    CollectCoin();
+            }
+
+            // Проверка сбора здоровья
+            if (health.Visible)
+            {
+                MoveObj(health, bgSpeed);
+
+                // подбор
+                if (player.Bounds.IntersectsWith(health.Bounds))
+                {
+                    lives++;
+                    if (lives > 3) lives = 3;
+
+                    UpdateLivesDisplay();
+                    health.Visible = false;
+                }
+            }
+
+            if (bossIntro &&
+                OutOfScreen(enemy1) &&
+                OutOfScreen(enemy2))
+            {
+                bossIntro = false;
+                StartBossFight();
+            }
+
+            if (bossFight && bossActive)
+            {
+                // Проверка на столкновение с игроком
+                if (player.Bounds.IntersectsWith(boss.Bounds) && !isInvulnerable)
+                {
+                    HandleCollision();
+                }
+
+                switch (bossState)
+                {
+                    // Появление босса
+                    case BossState.Entering:
+
+                        MoveObj(boss, bossSpeed);
+
+                        if (boss.Top >= bossStartPos.Y)
+                        {
+                            boss.Top = bossStartPos.Y;
+                            bossState = BossState.Idle;
+                            bossChargeCooldown = 0;
+                        }
+                        break;
+
+                    // Слежка за игроком
+                    case BossState.Idle:
+
+                        // Увеличение счетчика атаки
+                        bossChargeCooldown++;
+
+                        int bossCenter = boss.Left + boss.Width / 2;
+                        int playerCenter = player.Left + player.Width / 2;
+
+                        if (playerCenter > bossCenter + 5)
+                            bossStartPos.X += 2;
+                        else if (playerCenter < bossCenter - 5)
+                            bossStartPos.X -= 2;
+
+                        if (bossChargeCooldown > 120)
+                        {
+                            bossState = BossState.Charging;
+                            bossChargeCooldown = 0;
+                        }
+                        break;
+
+                    // Нападение
+                    case BossState.Charging:
+                        MoveObj(boss, bossSpeed * 2);
+
+                        if (OutOfScreen(boss))
+                        {
+                            bossState = BossState.Returning;
+                        }
+                        break;
+
+                    // Возвращение на исходную точку
+                    case BossState.Returning:
+                        MoveObj(boss, -bossSpeed);
+
+                        if (boss.Top <= bossStartPos.Y)
+                        {
+                            boss.Top = bossStartPos.Y;
+                            bossState = BossState.Idle;
+                        }
+                        break;
+                }
+            }
+
+            // Появление снаряда
+            if (bossFight && bossActive && bossState == BossState.Idle)
+            {
+                itemDropTimer++;
+
+                if (itemDropTimer > 150 && !bossItem.Visible && !itemReturning)
+                {
+                    DropBossItem();
+                    itemDropTimer = 0;
+                }
+            }
+
+            if (bossItem.Visible || itemReturning)
+            {
+                if (!itemCollected)
+                {
+                    MoveObj(bossItem, bgSpeed);
+
+                    // Подбор снаряда игроком
+                    if (player.Bounds.IntersectsWith(bossItem.Bounds))
+                    {
+                        itemCollected = true;
+                        itemReturning = true;
+                    }
+
+                    // Снаряд не был пойман
+                    if (OutOfScreen(bossItem) && !itemCollected)
+                    {
+                        itemReturning = false;
+                        itemCollected = false;
+
+                        bossItem.Visible = false;
+
+                        itemDropTimer = 0;
+                    }
+                }
+                // Снаряд возвращается к боссу
+                else if (itemReturning)
+                {
+                    Vector2 itemPos = new Vector2(bossItem.Left, bossItem.Top);
+                    Vector2 bossPos = new Vector2(boss.Left + boss.Width / 2 - bossItem.Width / 2, boss.Top + boss.Height / 2);
+                    Vector2 direction = bossPos - itemPos;
+
+                    float length = direction.Length();
+                    if (length > 0)
+                        direction /= length;
+
+                    bossItem.Left += (int)(direction.X * itemSpeed);
+                    bossItem.Top += (int)(direction.Y * itemSpeed);
+
+                    // Снаряд вернулся к боссу
+                    if (boss.Bounds.IntersectsWith(bossItem.Bounds))
+                    {
+                        bossHP -= 25;
+
+                        BossHit();
+
+                        itemReturning = false;
+                        itemCollected = false;
+
+                        bossItem.Visible = false;
+
+                        itemDropTimer = 0;
+                    }
+                }
+            }
+
+            if (bossHitAnim)
+            {
+                bossHitTimer--;
+
+                // Дрожание 
+                bossHitOffsetX = rand.Next(-4, 5);
+
+                // Мигание через цвет
+                boss.BackColor = bossHitTimer % 2 == 0 ? Color.DarkRed : Color.Transparent;
+
+                if (bossHitTimer <= 0)
+                {
+                    bossHitAnim = false;
+                    bossHitOffsetX = 0;
+                    boss.BackColor = Color.Transparent;
+                }
+            }
+
+            boss.Left = bossStartPos.X + bossHitOffsetX;
+
+            if (bossFight)
+            {
+                UpdateBossHP();
+
+                if (bossHP <= 0)
+                    KillBoss();
+            }
+
             // Анимация смерти босса
             if (bossDeathAnim)
             {
                 bossDeathTimer--;
 
-                // дрожание босса
+                // Дрожание босса
                 boss.Left = bossStartPos.X + rand.Next(-10, 11);
                 boss.Top += rand.Next(-5, 6);
 
-                // мигание
+                // Мигание
                 boss.Visible = bossDeathTimer % 4 != 0;
 
                 if (bossDeathTimer <= 0)
@@ -385,226 +634,6 @@ namespace game
                 }
             }
 
-            int bgSpeed = 1 + level;  // Скорость фона
-            int enemySpeed = 1 + level * 2;  // Скорость врагов
-
-            // Движение фона
-            MoveObj(bg1, bgSpeed);
-            MoveObj(bg2, bgSpeed);
-
-            if (bg1.Top >= 650)
-            {
-                bg1.Top = 0;
-                bg2.Top = -650;
-            }
-
-            // Движение врагов
-            MoveObj(enemy1, enemySpeed);
-            MoveObj(enemy2, enemySpeed);
-
-            // Восстановление объектов за пределами экрана
-            if (!bossIntro && !bossFight)
-            {
-                if (OutOfScreen(enemy1)) ResetEnemy(enemy1, true);
-                if (OutOfScreen(enemy2)) ResetEnemy(enemy2, false);
-
-                if (!coin.Visible || OutOfScreen(coin))
-                    ResetCoin();
-
-                if (!health.Visible && lives < 3)
-                    ResetHealth();
-            }
-
-            // Проверка столкновений с врагами
-            CheckCollisions();
-
-
-            // Проверка сбора монеты
-            if (coin.Visible)
-            {
-                MoveObj(coin, bgSpeed);
-
-                if (!bossIntro && !bossFight &&
-                player.Bounds.IntersectsWith(coin.Bounds))
-                    CollectCoin();
-            }
-
-            // Проверка сбора здоровья
-            if (health.Visible)
-            {
-                MoveObj(health, bgSpeed);
-
-                // подбор
-                if (player.Bounds.IntersectsWith(health.Bounds))
-                {
-                    lives++;
-                    if (lives > 3) lives = 3;
-
-                    UpdateLivesDisplay();
-                    health.Visible = false;
-                }
-            }
-
-            if (bossIntro &&
-                enemy1.Top > 650 &&
-                enemy2.Top > 650)
-            {
-                bossIntro = false;
-                StartBossFight();
-            }
-
-            if (bossFight && bossActive)
-            {
-                // Проверка на столкновение с игроком
-                if (player.Bounds.IntersectsWith(boss.Bounds) && !isInvulnerable)
-                {
-                    HandleCollision();
-                }
-
-                switch (bossState)
-                {
-                    case BossState.Entering:
-                        boss.Top += bossSpeed;
-
-                        if (boss.Top >= bossStartPos.Y)
-                        {
-                            boss.Top = bossStartPos.Y;
-                            bossState = BossState.Idle;
-                            bossChargeCooldown = 0;
-                        }
-                        break;
-
-                    case BossState.Idle:
-                        bossChargeCooldown++;
-
-                        int bossCenter = boss.Left + boss.Width / 2;
-                        int playerCenter = player.Left + player.Width / 2;
-
-                        if (playerCenter > bossCenter + 5)
-                            bossStartPos.X += 2;
-                        else if (playerCenter < bossCenter - 5)
-                            bossStartPos.X -= 2;
-
-                        if (bossChargeCooldown > 120)
-                        {
-                            bossState = BossState.Charging;
-                            bossChargeCooldown = 0;
-                        }
-                        break;
-
-                    case BossState.Charging:
-                        boss.Top += bossSpeed * 2;
-
-                        if (boss.Top > 650)
-                        {
-                            bossState = BossState.Returning;
-                        }
-                        break;
-
-                    case BossState.Returning:
-                        boss.Top -= bossSpeed;
-
-                        if (boss.Top <= bossStartPos.Y)
-                        {
-                            boss.Top = bossStartPos.Y;
-                            bossState = BossState.Idle;
-                        }
-                        break;
-                }
-            }
-
-            if (bossFight && bossActive && bossState == BossState.Idle)
-            {
-                itemDropTimer++;
-
-                // Спавн только если снаряд не активен
-                if (itemDropTimer > 150 && !bossItem.Visible && !itemReturning)
-                {
-                    DropBossItem();
-                    itemDropTimer = 0;
-                }
-            }
-
-            if (bossItem.Visible || itemReturning)
-            {
-                if (!itemCollected)
-                {
-                    MoveObj(bossItem, bgSpeed);
-
-                    if (player.Bounds.IntersectsWith(bossItem.Bounds))
-                    {
-                        itemCollected = true;
-                        itemReturning = true;
-                    }
-
-                    if (bossItem.Top > 650 && !itemCollected)
-                    {
-                        itemReturning = false;
-                        itemCollected = false;
-
-                        bossItem.Visible = false;
-
-                        itemDropTimer = 0;
-                    }
-                }
-                else if (itemReturning)
-                {
-                    Vector2 itemPos = new Vector2(bossItem.Left, bossItem.Top);
-                    Vector2 bossPos = new Vector2(boss.Left + boss.Width / 2 - bossItem.Width / 2, boss.Top + boss.Height / 2);
-                    Vector2 direction = bossPos - itemPos;
-
-                    float length = direction.Length();
-                    if (length > 0)
-                        direction /= length;
-
-                    bossItem.Left += (int)(direction.X * itemSpeed);
-                    bossItem.Top += (int)(direction.Y * itemSpeed);
-
-                    // снаряд вернулся к боссу
-                    if (boss.Bounds.IntersectsWith(bossItem.Bounds))
-                    {
-                        bossHP -= 25;
-
-                        BossHit();
-
-                        itemReturning = false;
-                        itemCollected = false;
-
-                        bossItem.Visible = false;
-
-                        itemDropTimer = 0;
-                    }
-                }
-            }
-
-            if (bossHitAnim)
-            {
-                bossHitTimer--;
-
-                // дрожание только визуально, через смещение от реальной позиции
-                bossHitOffsetX = rand.Next(-4, 5);
-
-                // мигание через цвет
-                boss.BackColor = bossHitTimer % 2 == 0 ? Color.DarkRed : Color.Transparent;
-
-                if (bossHitTimer <= 0)
-                {
-                    bossHitAnim = false;
-                    bossHitOffsetX = 0;
-                    boss.BackColor = Color.Transparent;
-                }
-            }
-
-            boss.Left = bossStartPos.X + bossHitOffsetX;
-
-            if (bossFight)
-            {
-                UpdateBossHP();
-
-                if (bossHP <= 0)
-                    KillBoss();
-            }
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -616,7 +645,7 @@ namespace game
                 int speed = 10;
                 bool moved = false;
 
-                // Основное управление
+                // Основное управление игроком
                 if ((e.KeyCode == Keys.Left || e.KeyCode == Keys.A) && player.Left > 150)
                 {
                     player.Left -= speed;
@@ -627,7 +656,6 @@ namespace game
                     player.Left += speed;
                     moved = true;
                 }
-
 
                 // Вертикальное движение
                 if ((e.KeyCode == Keys.Up || e.KeyCode == Keys.W) && player.Top > 0)
@@ -696,14 +724,7 @@ namespace game
             StartCountdown();
         }
 
-        private void StartCountdown()
-        {
-            countdownValue = 3;
-            labelCountdown.Text = countdownValue.ToString();
-            labelCountdown.Visible = true;
-            timerCountdown.Start();
-        }
-
+        // Пульсация кнопки старта
         private void timerPulse_Tick(object sender, EventArgs e)
         {
             int delta = pulse ? 1 : -1;
@@ -718,6 +739,15 @@ namespace game
 
             if (btnStart.Width < startBtnSize.Width)
                 pulse = true;
+        }
+
+        // Обратный отсчет перед началом игры
+        private void StartCountdown()
+        {
+            countdownValue = 3;
+            labelCountdown.Text = countdownValue.ToString();
+            labelCountdown.Visible = true;
+            timerCountdown.Start();
         }
 
         private void timerCountdown_Tick(object sender, EventArgs e)
