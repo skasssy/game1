@@ -71,17 +71,19 @@ namespace game
             // 
             bg1.Image = (Image)resources.GetObject("bg1.Image");
             bg1.Location = new Point(0, 0);
+            bg1.Margin = new Padding(4, 4, 4, 4);
             bg1.Name = "bg1";
-            bg1.Size = new Size(840, 650);
+            bg1.Size = new Size(1050, 812);
             bg1.TabIndex = 0;
             bg1.TabStop = false;
             // 
             // bg2
             // 
             bg2.Image = (Image)resources.GetObject("bg2.Image");
-            bg2.Location = new Point(0, -650);
+            bg2.Location = new Point(0, -812);
+            bg2.Margin = new Padding(4, 4, 4, 4);
             bg2.Name = "bg2";
-            bg2.Size = new Size(840, 650);
+            bg2.Size = new Size(1050, 812);
             bg2.TabIndex = 1;
             bg2.TabStop = false;
             // 
@@ -95,9 +97,10 @@ namespace game
             // 
             player.BackColor = Color.Gray;
             player.Image = (Image)resources.GetObject("player.Image");
-            player.Location = new Point(380, 517);
+            player.Location = new Point(475, 646);
+            player.Margin = new Padding(4, 4, 4, 4);
             player.Name = "player";
-            player.Size = new Size(86, 128);
+            player.Size = new Size(108, 160);
             player.SizeMode = PictureBoxSizeMode.StretchImage;
             player.TabIndex = 2;
             player.TabStop = false;
@@ -106,9 +109,10 @@ namespace game
             // 
             enemy1.BackColor = Color.Gray;
             enemy1.Image = (Image)resources.GetObject("enemy1.Image");
-            enemy1.Location = new Point(185, -129);
+            enemy1.Location = new Point(231, -161);
+            enemy1.Margin = new Padding(4, 4, 4, 4);
             enemy1.Name = "enemy1";
-            enemy1.Size = new Size(86, 128);
+            enemy1.Size = new Size(108, 160);
             enemy1.SizeMode = PictureBoxSizeMode.StretchImage;
             enemy1.TabIndex = 3;
             enemy1.TabStop = false;
@@ -117,9 +121,10 @@ namespace game
             // 
             enemy2.BackColor = Color.Gray;
             enemy2.Image = (Image)resources.GetObject("enemy2.Image");
-            enemy2.Location = new Point(570, -400);
+            enemy2.Location = new Point(712, -500);
+            enemy2.Margin = new Padding(4, 4, 4, 4);
             enemy2.Name = "enemy2";
-            enemy2.Size = new Size(86, 128);
+            enemy2.Size = new Size(108, 160);
             enemy2.SizeMode = PictureBoxSizeMode.StretchImage;
             enemy2.TabIndex = 4;
             enemy2.TabStop = false;
@@ -130,18 +135,20 @@ namespace game
             labelLose.BackColor = Color.Red;
             labelLose.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelLose.ForeColor = Color.White;
-            labelLose.Location = new Point(243, 159);
+            labelLose.Location = new Point(304, 199);
+            labelLose.Margin = new Padding(4, 0, 4, 0);
             labelLose.Name = "labelLose";
-            labelLose.Size = new Size(360, 54);
+            labelLose.Size = new Size(431, 65);
             labelLose.TabIndex = 5;
             labelLose.Text = "ВЫ ПРОИГРАЛИ!";
             // 
             // btnRestart
             // 
             btnRestart.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            btnRestart.Location = new Point(341, 235);
+            btnRestart.Location = new Point(426, 294);
+            btnRestart.Margin = new Padding(4, 4, 4, 4);
             btnRestart.Name = "btnRestart";
-            btnRestart.Size = new Size(161, 41);
+            btnRestart.Size = new Size(201, 51);
             btnRestart.TabIndex = 6;
             btnRestart.Text = "Перезапустить";
             btnRestart.UseVisualStyleBackColor = true;
@@ -153,9 +160,10 @@ namespace game
             labelPause.BackColor = Color.Red;
             labelPause.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             labelPause.ForeColor = Color.White;
-            labelPause.Location = new Point(24, 601);
+            labelPause.Location = new Point(30, 751);
+            labelPause.Margin = new Padding(4, 0, 4, 0);
             labelPause.Name = "labelPause";
-            labelPause.Size = new Size(78, 28);
+            labelPause.Size = new Size(94, 32);
             labelPause.TabIndex = 7;
             labelPause.Text = "ПАУЗА";
             labelPause.Visible = false;
@@ -166,9 +174,10 @@ namespace game
             labelCoins.BackColor = Color.White;
             labelCoins.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelCoins.ForeColor = Color.Black;
-            labelCoins.Location = new Point(24, 23);
+            labelCoins.Location = new Point(30, 29);
+            labelCoins.Margin = new Padding(4, 0, 4, 0);
             labelCoins.Name = "labelCoins";
-            labelCoins.Size = new Size(111, 28);
+            labelCoins.Size = new Size(131, 32);
             labelCoins.TabIndex = 8;
             labelCoins.Text = "Монеты: 0";
             // 
@@ -178,9 +187,10 @@ namespace game
             labelLives.BackColor = Color.White;
             labelLives.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelLives.ForeColor = Color.Black;
-            labelLives.Location = new Point(703, 23);
+            labelLives.Location = new Point(879, 29);
+            labelLives.Margin = new Padding(4, 0, 4, 0);
             labelLives.Name = "labelLives";
-            labelLives.Size = new Size(128, 28);
+            labelLives.Size = new Size(150, 32);
             labelLives.TabIndex = 9;
             labelLives.Text = "Жизни: ♥♥♥";
             // 
@@ -188,9 +198,10 @@ namespace game
             // 
             coin.BackColor = Color.Gray;
             coin.Image = (Image)resources.GetObject("coin.Image");
-            coin.Location = new Point(565, -600);
+            coin.Location = new Point(600, -750);
+            coin.Margin = new Padding(4, 4, 4, 4);
             coin.Name = "coin";
-            coin.Size = new Size(32, 32);
+            coin.Size = new Size(40, 40);
             coin.SizeMode = PictureBoxSizeMode.StretchImage;
             coin.TabIndex = 10;
             coin.TabStop = false;
@@ -201,9 +212,10 @@ namespace game
             labelLevel.BackColor = Color.White;
             labelLevel.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelLevel.ForeColor = Color.Black;
-            labelLevel.Location = new Point(703, 75);
+            labelLevel.Location = new Point(879, 94);
+            labelLevel.Margin = new Padding(4, 0, 4, 0);
             labelLevel.Name = "labelLevel";
-            labelLevel.Size = new Size(111, 28);
+            labelLevel.Size = new Size(131, 32);
             labelLevel.TabIndex = 11;
             labelLevel.Text = "Уровень: 1";
             // 
@@ -213,9 +225,10 @@ namespace game
             labelHighScore.BackColor = Color.White;
             labelHighScore.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelHighScore.ForeColor = Color.Black;
-            labelHighScore.Location = new Point(703, 601);
+            labelHighScore.Location = new Point(879, 751);
+            labelHighScore.Margin = new Padding(4, 0, 4, 0);
             labelHighScore.Name = "labelHighScore";
-            labelHighScore.Size = new Size(103, 28);
+            labelHighScore.Size = new Size(121, 32);
             labelHighScore.TabIndex = 12;
             labelHighScore.Text = "Рекорд: 0";
             // 
@@ -226,8 +239,9 @@ namespace game
             panelMenu.Controls.Add(btnStart);
             panelMenu.Dock = DockStyle.Fill;
             panelMenu.Location = new Point(0, 0);
+            panelMenu.Margin = new Padding(4, 4, 4, 4);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(840, 650);
+            panelMenu.Size = new Size(1050, 812);
             panelMenu.TabIndex = 13;
             // 
             // btnStart
@@ -237,9 +251,10 @@ namespace game
             btnStart.FlatStyle = FlatStyle.Flat;
             btnStart.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             btnStart.ForeColor = Color.White;
-            btnStart.Location = new Point(362, 350);
+            btnStart.Location = new Point(452, 438);
+            btnStart.Margin = new Padding(4, 4, 4, 4);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(129, 49);
+            btnStart.Size = new Size(161, 61);
             btnStart.TabIndex = 1;
             btnStart.Text = "СТАРТ";
             btnStart.UseVisualStyleBackColor = false;
@@ -249,9 +264,10 @@ namespace game
             // 
             health.BackColor = Color.Gray;
             health.Image = (Image)resources.GetObject("health.Image");
-            health.Location = new Point(624, -1000);
+            health.Location = new Point(780, -1250);
+            health.Margin = new Padding(4, 4, 4, 4);
             health.Name = "health";
-            health.Size = new Size(32, 32);
+            health.Size = new Size(40, 40);
             health.SizeMode = PictureBoxSizeMode.StretchImage;
             health.TabIndex = 2;
             health.TabStop = false;
@@ -261,9 +277,10 @@ namespace game
             // 
             boss.BackColor = Color.Gray;
             boss.Image = (Image)resources.GetObject("boss.Image");
-            boss.Location = new Point(340, -190);
+            boss.Location = new Point(425, -238);
+            boss.Margin = new Padding(4, 4, 4, 4);
             boss.Name = "boss";
-            boss.Size = new Size(151, 190);
+            boss.Size = new Size(189, 238);
             boss.SizeMode = PictureBoxSizeMode.StretchImage;
             boss.TabIndex = 3;
             boss.TabStop = false;
@@ -272,9 +289,10 @@ namespace game
             // HPpanel
             // 
             HPpanel.BackColor = Color.Firebrick;
-            HPpanel.Location = new Point(268, 23);
+            HPpanel.Location = new Point(335, 29);
+            HPpanel.Margin = new Padding(4, 4, 4, 4);
             HPpanel.Name = "HPpanel";
-            HPpanel.Size = new Size(300, 20);
+            HPpanel.Size = new Size(375, 25);
             HPpanel.TabIndex = 2;
             HPpanel.Visible = false;
             // 
@@ -284,9 +302,10 @@ namespace game
             labelCountdown.BackColor = Color.Transparent;
             labelCountdown.Font = new Font("Segoe UI", 64F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelCountdown.ForeColor = Color.Red;
-            labelCountdown.Location = new Point(370, 225);
+            labelCountdown.Location = new Point(462, 281);
+            labelCountdown.Margin = new Padding(4, 0, 4, 0);
             labelCountdown.Name = "labelCountdown";
-            labelCountdown.Size = new Size(122, 142);
+            labelCountdown.Size = new Size(146, 170);
             labelCountdown.TabIndex = 3;
             labelCountdown.Text = "3";
             labelCountdown.TextAlign = ContentAlignment.MiddleCenter;
@@ -306,9 +325,10 @@ namespace game
             // 
             bossItem.BackColor = Color.Gray;
             bossItem.Image = (Image)resources.GetObject("bossItem.Image");
-            bossItem.Location = new Point(243, 442);
+            bossItem.Location = new Point(304, 552);
+            bossItem.Margin = new Padding(4, 4, 4, 4);
             bossItem.Name = "bossItem";
-            bossItem.Size = new Size(50, 43);
+            bossItem.Size = new Size(62, 54);
             bossItem.SizeMode = PictureBoxSizeMode.StretchImage;
             bossItem.TabIndex = 14;
             bossItem.TabStop = false;
@@ -316,10 +336,10 @@ namespace game
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Gray;
-            ClientSize = new Size(840, 650);
+            ClientSize = new Size(1050, 812);
             Controls.Add(panelMenu);
             Controls.Add(labelLose);
             Controls.Add(btnRestart);
@@ -340,6 +360,7 @@ namespace game
             Controls.Add(bg1);
             Controls.Add(bg2);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(4, 4, 4, 4);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";

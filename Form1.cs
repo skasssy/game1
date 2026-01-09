@@ -28,7 +28,7 @@ namespace game
 
         private int bossHP = 100;
         private int bossMaxHP = 100;
-        private int bossLevel = 5;
+        private int bossLevel = 3;
         private int bossSpeed = 4;
         private int bossChargeCooldown = 0;
         private bool bossIntro = false;
@@ -359,6 +359,50 @@ namespace game
             // Если игра на паузе или проиграна - выходим
             if (!timer.Enabled || lose) return;
 
+            // Анимация смерти босса
+            if (bossDeathAnim)
+            {
+                bossDeathTimer--;
+
+                // Дрожание босса
+                boss.Left = bossStartPos.X + rand.Next(-10, 11);
+                boss.Top += rand.Next(-5, 6);
+
+                // Мигание
+                boss.Visible = bossDeathTimer % 4 != 0;
+
+                if (bossDeathTimer <= 0)
+                {
+                    bossDeathAnim = false;
+                    boss.Visible = false;
+
+                    timer.Stop();
+
+                    labelLose.Text = "ВЫ ПОБЕДИЛИ!";
+                    labelLose.BackColor = Color.Green;
+                    labelLose.Visible = true;
+                    btnRestart.Visible = true;
+                }
+
+                return;
+            }
+
+            // Обновляем таймер неуязвимости
+            if (isInvulnerable)
+            {
+                invulnerabilityTimer--;
+                if (invulnerabilityTimer <= 0)
+                {
+                    isInvulnerable = false;
+                    player.BackColor = Color.Transparent;
+                }
+                else
+                {
+                    // Мигание при неуязвимости
+                    player.BackColor = (invulnerabilityTimer / 5) % 2 == 0 ? Color.Transparent : Color.FromArgb(150, Color.Yellow);
+                }
+            }
+
             int bgSpeed = 1 + level;  // Скорость фона
             int enemySpeed = 1 + level * 2;  // Скорость врагов
 
@@ -589,51 +633,6 @@ namespace game
                 if (bossHP <= 0)
                     KillBoss();
             }
-
-            // Анимация смерти босса
-            if (bossDeathAnim)
-            {
-                bossDeathTimer--;
-
-                // Дрожание босса
-                boss.Left = bossStartPos.X + rand.Next(-10, 11);
-                boss.Top += rand.Next(-5, 6);
-
-                // Мигание
-                boss.Visible = bossDeathTimer % 4 != 0;
-
-                if (bossDeathTimer <= 0)
-                {
-                    bossDeathAnim = false;
-                    boss.Visible = false;
-
-                    timer.Stop();
-
-                    labelLose.Text = "ВЫ ПОБЕДИЛИ!";
-                    labelLose.BackColor = Color.Green;
-                    labelLose.Visible = true;
-                    btnRestart.Visible = true;
-                }
-
-                return;
-            }
-
-            // Обновляем таймер неуязвимости
-            if (isInvulnerable)
-            {
-                invulnerabilityTimer--;
-                if (invulnerabilityTimer <= 0)
-                {
-                    isInvulnerable = false;
-                    player.BackColor = Color.Transparent;
-                }
-                else
-                {
-                    // Мигание при неуязвимости
-                    player.BackColor = (invulnerabilityTimer / 5) % 2 == 0 ? Color.Transparent : Color.FromArgb(150, Color.Yellow);
-                }
-            }
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
